@@ -1,2 +1,2 @@
 # noso.dev
-Placeholder static page for noso.dev site
+Landing page for noso.dev domains

@@ -1,0 +1,61 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: noso-dev-svc
+spec:
+  ports:
+    - port: 80
+      targetPort: 5000
+  selector:
+    app: noso-dev
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: noso-dev
+  labels:
+    app: noso-dev
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: noso-dev
+  minReadySeconds: 5
+  template:
+    metadata:
+      labels:
+        app: noso-dev
+    spec:
+      containers:
+      - name: noso-dev
+        image: <IMAGE>
+        ports:
+        - containerPort: 5000
+        resources:
+          requests:
+            cpu: 100m
+          limits:
+            cpu: 100m
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: noso-dev-ingress
+  annotations:
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+spec:
+  tls:
+  - hosts:
+    - noso.dev
+    secretName: noso-dev-tls
+  rules:
+    - host: noso.dev
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: noso-dev-svc
+                port:
+                  number: 5000
