@@ -50,7 +50,10 @@ jobs:
       run: doctl kubernetes cluster kubeconfig save --expiry-seconds 600 dank-dev-04
 
     - name: Deploy to DigitalOcean Kubernetes
-      run: kubectl apply -f $GITHUB_WORKSPACE/config/deployment.yml
+      run: |
+        kubectl apply -f $GITHUB_WORKSPACE/config/deployment.yml
+        kubectl -n ingress-nginx patch configmap tcp-services --patch "$(cat tcp-services-patch.yaml)"
+        #kubectl -n ingress-nginx patch deploy ingress-nginx-controller --patch "$(cat ingress-nginx-controller-patch.yaml)"
 
     - name: Verify deployment
       run: kubectl rollout status deployment/noso-dev

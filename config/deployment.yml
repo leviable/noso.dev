@@ -47,9 +47,20 @@ spec:
   tls:
   - hosts:
     - noso.dev
+    - pool.noso.dev
     secretName: noso-dev-tls
   rules:
     - host: noso.dev
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: noso-dev-svc
+                port:
+                  number: 5000
+    - host: pool.noso.dev
       http:
         paths:
           - path: /
