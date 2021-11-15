@@ -1,0 +1,7 @@
+spec:
+  ports:
+    - appProtocol: tcp
+      name: pool-noso-dev-tcp-8082
+      port: 8082
+      protocol: TCP
+      targetPort: 8082

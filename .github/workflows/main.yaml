@@ -53,6 +53,7 @@ jobs:
       run: |
         kubectl apply -f $GITHUB_WORKSPACE/config/deployment.yml
         kubectl patch configmap tcp-services --patch "$(cat config/tcp-services-patch.yaml)" -n ingress-nginx
+        kubectl patch svc ingress-nginx-controller --patch "$(cat config/ingress-nginx-controller-svc-patch.yaml)" -n ingress-nginx
         kubectl patch svc gw-dank-dev-svc --patch "$(cat config/gw-dank-dev-patch.yaml)"
 
     - name: Verify deployment
